@@ -30,15 +30,26 @@
  *    SOFTWARE.
  *
  *******************************************************************************/
-#ifndef __WEBSERVER_H_
-#define __WEBSERVER_H_
+
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /***  HEADER FILES TO INCLUDE          ***/
+#ifdef _WIN32
+#include "SocketsConWin.h"
+#else
 #include "SocketsCon.h"
+#endif
+    
 #include "Options.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
+
+#include "Core.h"
 
 /***  DEFINES                          ***/
 
@@ -88,7 +99,7 @@ struct WSPageProp
     const char **Cookies;
     const char **Gets;
     const char **Posts;
-    uintptr_t FileID;
+    void* FileID;
 };
 
 typedef enum
@@ -98,8 +109,6 @@ typedef enum
     e_WSPostState_Error,
     e_WSPostStateMAX
 } e_WSPostStateType;
-
-typedef uint32_t t_ElapsedTime;   // Time to be used for elapsed time
 
 struct WebServer
 {
@@ -132,6 +141,7 @@ void WS_Shutdown(void);
 bool WS_Start(uint16_t Port);
 void WS_Tick(void);
 void WS_WriteWhole(struct WebServer *Web,const char *Buffer,int Len);
+void WS_WriteWholeWithType(struct WebServer *Web,const char *Buffer,int Len,const char *Type);
 void WS_WriteWholeStr(struct WebServer *Web,const char *Buffer);
 void WS_WriteChunk(struct WebServer *Web,const char *Buffer,int Len);
 void WS_WriteChunkStr(struct WebServer *Web,const char *Buffer);
@@ -151,7 +161,8 @@ int WS_GetOSSocketHandles(t_ConSocketHandle *Handles);
 
 /* Web server calls these */
 bool FS_GetFileProperties(const char *Filename,struct WSPageProp *PageProp);
-void FS_SendFile(struct WebServer *Web,uintptr_t FileID);
-t_ElapsedTime ReadElapsedClock(void);
+void FS_SendFile(struct WebServer *Web, void* FileID);
 
+#ifdef __cplusplus
+}
 #endif

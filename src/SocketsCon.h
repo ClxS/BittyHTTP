@@ -30,8 +30,12 @@
  *    SOFTWARE.
  *
  *******************************************************************************/
-#ifndef __SOCKETSCON_H_
-#define __SOCKETSCON_H_
+
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /***  HEADER FILES TO INCLUDE          ***/
 #include <stdbool.h>
@@ -116,4 +120,6 @@ bool SocketsCon_EnableAddressReuse(struct SocketCon *Con,bool Enable);
 bool SocketsCon_GetSocketHandle(struct SocketCon *Con,
         t_ConSocketHandle *RetHandle);
 
+#ifdef __cplusplus
+}
 #endif

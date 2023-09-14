@@ -33,7 +33,6 @@
 
 /*** HEADER FILES TO INCLUDE  ***/
 #include "WebServer.h"
-#include "SocketsCon.h"
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
@@ -1002,6 +1001,32 @@ void WS_WriteWhole(struct WebServer *Web,const char *Buffer,int Len)
     if(!Web->ReplyStarted)
         WS_StartReply(Web);
 
+    sprintf(buff,"Content-Length: %d\r\n",Len);
+    SocketsCon_Write(&Web->Con,buff,strlen(buff));
+    SocketsCon_Write(&Web->Con,"\r\n",2);
+    SocketsCon_Write(&Web->Con,Buffer,Len);
+}
+
+void WS_WriteWholeWithType(struct WebServer *Web,const char *Buffer,int Len,const char* Type)
+{
+
+    if(Web->WriteStarted)
+    {
+        Web->ReplyStatus=e_ReplyStatus_InternalServerError;
+        return;
+    }
+
+    Web->WriteStarted=true;
+    Web->ReplyStatus=e_ReplyStatus_Ok;
+
+    if(!Web->ReplyStarted)
+        WS_StartReply(Web);
+
+    char typeBuff[100];
+    sprintf(typeBuff,"Content-Type: %s\r\n",Type);
+    SocketsCon_Write(&Web->Con,typeBuff,strlen(typeBuff));
+    
+    char buff[100];
     sprintf(buff,"Content-Length: %d\r\n",Len);
     SocketsCon_Write(&Web->Con,buff,strlen(buff));
     SocketsCon_Write(&Web->Con,"\r\n",2);

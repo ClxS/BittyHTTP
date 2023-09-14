@@ -30,9 +30,13 @@
  *    SOFTWARE.
  *
  *******************************************************************************/
-#ifndef __OPTIONS_H_
-#define __OPTIONS_H_
 
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
 /***  HEADER FILES TO INCLUDE          ***/
 
 /***  DEFINES                          ***/
@@ -53,4 +57,7 @@
 
 /***  EXTERNAL FUNCTION PROTOTYPES     ***/
 
+#ifdef __cplusplus
+}
 #endif
+
